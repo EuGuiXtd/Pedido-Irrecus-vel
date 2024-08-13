@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Pedido Irrecusavel</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        .swal2-confirm {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <p>Pedido Irrecusavel</p>
+        <div class="button-container">
+            <button>
+                <a id="yes">Sim</a>
+            </button>
+            <button id="no">Não</button>
+        </div>
+    </div>
+    
+    <script>
+        let button = document.getElementById('no')
+        let height = window.innerHeight-50
+        let width = window.innerWidth-50
+
+        button.addEventListener('mouseover', function(){
+            button.style.position='absolute'
+            button.style.top = Math.random() * height + 'px'
+            button.style.left = Math.random() * width + 'px'
+        })
+
+        document.getElementById('yes').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Agora tem uma noticia boa e uma ruim pra você',
+                text: 'A boa é que você tem um encontro agora, e a ruim é que é comigo 😘',
+                imageUrl: 'https://i.pinimg.com/originals/02/8f/ac/028fac670a4101695f0d9ccecd42fed6.jpg',
+                imageWidth: 100,
+                imageHeight: 100,
+                imageAlt: 'Imagem personalizada',
+                confirmButtonText: '💘',
+                customClass: {
+                    confirmButton: 'swal2-confirm'
+                }
+            })
+        })
+    </script>
+</body>
+</html>
