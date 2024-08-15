@@ -16,12 +16,11 @@
             <button id="no">Não</button>
         </div>
     </div>
+        <!-- Botão para baixar o PDF -->
+        <button id="download-pdf">Pdf</button>
 
-    <!-- Botão para baixar o PDF -->
-    <button id="download-pdf">Pdf</button>
-
-    <!-- Link oculto para o arquivo PDF -->
-    <a id="pdf-link" href="arquivo.pdf" download style="display: none;"></a>
+        <!-- Link oculto para o arquivo PDF -->
+        <a id="pdf-link" href="arquivo.pdf" download style="display: none;"></a>
 
     <!-- Elemento de áudio para tocar música de fundo -->
     <audio id="background-music" loop></audio>
@@ -52,16 +51,89 @@
             fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
                 method: 'PUT',
                 body: JSON.stringify({
-                    uris: ['spotify:playlist:37i9dQZF1DX6cg4h2PoN9y'] // Substitua pelo URI da playlist desejada
+                    context_uri: 'spotify:playlist:37i9dQZF1DXcBWIGoYBM5M' // Substitua pelo URI da playlist que deseja tocar
                 }),
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
+                },
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Playback started');
+                } else {
+                    console.error('Error starting playback', response);
                 }
             });
         }
 
-        // Função para baixar o PDF existente
+        document.getElementById('yes').addEventListener('click', function() {
+            Swal.fire({
+                title: 'Agora você tem um encontro comigo hihi',
+                text: 'Mas antes, testa clicar no não fiz com bastante carinho',
+                imageUrl: 'https://i.pinimg.com/originals/02/8f/ac/028fac670a4101695f0d9ccecd42fed6.jpg',
+                imageWidth: 100,
+                imageHeight: 100,
+                imageAlt: 'Imagem personalizada',
+                confirmButtonText: '💘',
+                customClass: {
+                    confirmButton: 'swal2-confirm'
+                }
+            });
+        });
+
+        document.getElementById('no').addEventListener('click', function() {
+            const messages = [
+                'Tem certeza?',
+                'Que tal uma musica pra te convencer?',
+                'Qual foi ja deu uma olhada nos motivos pra me namorar?',
+                'Você é insistente mesmo hein',
+                'Eu acho que nesse ponto você só ta vendo até onde as mensagens vão',
+                'Se eu insistir mais um pouco, você topa sair comigo?',
+                "Eu acho que você ja vai vai sair comigo, mas eu vou continuar com as mensagens",
+                'Desafio aceito: convencer você a clicar no não',
+                'Eu acho que você não vai clicar no não',
+                'Será que consigo convencer você dessa vez?',
+                'de 0 a 10 qual a chance de você clicar no não?',
+                'Eu sabia que era zero',
+                'Minha criatividade tem limite sabia?',
+                'Se você clicar no não, depois eu deixo você clicar no sim',
+                'Meu deus você é muito determinada', 
+                'Vou apelar to avisando', 
+                'Se você clicar no não, vai ter que me dar o cú',
+                'Não é possivel, eu desisto',
+            ];
+            let messageIndex = 0;
+
+            function showConfirmation() {
+                Swal.fire({
+                    title: messages[messageIndex],
+                    showDenyButton: true,
+                    showCancelButton: messageIndex >= 1, // Mostra o botão de play a partir do segundo alerta
+                    confirmButtonText: 'Sim',
+                    denyButtonText: 'Não',
+                    cancelButtonText: 'Play Música',
+                    customClass: {
+                        confirmButton: 'swal2-confirm',
+                        denyButton: 'swal2-deny',
+                        cancelButton: 'swal2-cancel'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        messageIndex = (messageIndex + 1) % messages.length; // Avança para a próxima mensagem
+                        showConfirmation(); // Chama novamente para criar o ciclo infinito
+                    } else if (result.isDenied) {
+                        // Apenas fecha o alerta sem exibir outra mensagem
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        // Dá play na música sem fechar o alerta
+                        playMusic();
+                        showConfirmation(); // Chama novamente para manter o alerta aberto
+                    }
+                });
+            }
+
+            showConfirmation();
+        });
+
         function downloadPDF() {
             document.getElementById('pdf-link').click();
         }
