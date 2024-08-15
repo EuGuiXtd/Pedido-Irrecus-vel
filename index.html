@@ -4,52 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Pedido Irrecusavel</title>
+    <title>Pedido Irrecusável</title>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <style>
-        .swal2-confirm {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
+    <script src="https://sdk.scdn.co/spotify-player.js"></script>
 </head>
 <body>
     <div class="box">
-        <p>Pedido Irrecusavel</p>
+        <h1 class="title">Aceita sair comigo?</h1>
         <div class="button-container">
-            <button>
-                <a id="yes">Sim</a>
-            </button>
+            <button id="yes">Sim</button>
             <button id="no">Não</button>
         </div>
     </div>
-    
+
+    <!-- Botão para baixar o PDF -->
+    <button id="download-pdf">Pdf</button>
+
+    <!-- Link oculto para o arquivo PDF -->
+    <a id="pdf-link" href="arquivo.pdf" download style="display: none;"></a>
+
+    <!-- Elemento de áudio para tocar música de fundo -->
+    <audio id="background-music" loop></audio>
+
     <script>
-        let button = document.getElementById('no')
-        let height = window.innerHeight-50
-        let width = window.innerWidth-50
+        let player;
+        let deviceId;
+        const token = 'BQC-hPGrLRqqUSrmyl6W4XNqMezErwwwDRIvMoueH-exotO7zrtWe-f8tgN6FN5lUVBLUSWl_TGYVb_mtqr-d6K0gjDVq06dlksdTom92ZxlOAOWRXmbQHRKig-QfXJBQt-d9jSZiSzDlsyKx1gfgGsFyiPLH9RHd91TEvvipwJ2hFw1XxteRWc49MsZsHvTGkSZ90rj1xHl3vN3Q6aypUG_YAMlh5VZNg'; // Substitua pelo seu token de acesso do Spotify
 
-        button.addEventListener('mouseover', function(){
-            button.style.position='absolute'
-            button.style.top = Math.random() * height + 'px'
-            button.style.left = Math.random() * width + 'px'
-        })
+        window.onSpotifyWebPlaybackSDKReady = () => {
+            player = new Spotify.Player({
+                name: 'Web Playback SDK Quick Start Player',
+                getOAuthToken: cb => { cb(token); },
+                volume: 0.03 // Ajuste o volume aqui (0.0 a 1.0)
+            });
 
-        document.getElementById('yes').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Agora tem uma noticia boa e uma ruim pra você',
-                text: 'A boa é que você tem um encontro agora, e a ruim é que é comigo 😘',
-                imageUrl: 'https://i.pinimg.com/originals/02/8f/ac/028fac670a4101695f0d9ccecd42fed6.jpg',
-                imageWidth: 100,
-                imageHeight: 100,
-                imageAlt: 'Imagem personalizada',
-                confirmButtonText: '💘',
-                customClass: {
-                    confirmButton: 'swal2-confirm'
+            // Conecta o player
+            player.connect();
+
+            // Obter o ID do dispositivo
+            player.addListener('ready', ({ device_id }) => {
+                deviceId = device_id;
+                console.log('Device ID', device_id);
+            });
+        };
+
+        function playMusic() {
+            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
+                method: 'PUT',
+                body: JSON.stringify({
+                    uris: ['spotify:playlist:37i9dQZF1DX6cg4h2PoN9y'] // Substitua pelo URI da playlist desejada
+                }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
-            })
-        })
+            });
+        }
+
+        // Função para baixar o PDF existente
+        function downloadPDF() {
+            document.getElementById('pdf-link').click();
+        }
+
+        // Adiciona o evento de clique ao botão de download de PDF
+        document.getElementById('download-pdf').addEventListener('click', downloadPDF);
     </script>
 </body>
 </html>
