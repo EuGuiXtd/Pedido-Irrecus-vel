@@ -18,13 +18,13 @@
     </div>
     
     <script>
-                function startDownload() {
+        function startDownload() {
             const link = document.createElement('a');
-            link.href = 'arquivo.pdf'; // Substitua pelo caminho do seu arquivo PDF
-            link.download = 'convite foda'; // Nome do arquivo que será baixado
+            link.href = 'https://festalab.com.br/20anos-do-guilherme'; // Substitua pelo caminho do seu arquivo PDF
+            link.target = '_blank';
             link.click();
         }
-                function showNewText() {
+        function showNewText() {
             let newText = document.getElementById('newText');
             newText.style.display = 'block';
             typeWriter(newText, startDownload);
@@ -64,11 +64,11 @@
             document.getElementById('mainTitle').style.transition = 'opacity 1s ease'; 
             document.getElementById('mainTitle').style.opacity = 0;
   
-  
-  setTimeout(() => {
+
+            setTimeout(() => {
     document.getElementById('mainTitle').style.display = 'none';
-    showNewText();
-  }, 1000);
+                showNewText();
+            }, 1000);
         })
     </script>
     <script src="script.js"></script>
