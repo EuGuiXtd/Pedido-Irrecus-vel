@@ -3,143 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Pedido Irrecusável</title>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://sdk.scdn.co/spotify-player.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <title>Pedido Irrecusavel</title>
 </head>
 <body>
     <div class="box">
-        <h1 class="title">Aceita sair comigo?</h1>
+        <h1 id="mainTitle">Aceita sair comigo?</h1>
         <div class="button-container">
-            <button id="yes">Sim</button>
-            <button id="no">Não</button>
+            <button id="btnYes">Sim</button>
+            <button id="btnNo">Não</button>
         </div>
+        <h2 id="newText">Tá vendo esse balão subindo? É o meu desejo de conseguir um encontro com a pessoa mais chata do mundo se realizando 😜</h2>
+        <div id="balloon" class="hidden"></div>
     </div>
-        <!-- Botão para baixar o PDF -->
-        <button id="download-pdf">Pdf</button>
-
-        <!-- Link oculto para o arquivo PDF -->
-        <a id="pdf-link" href="arquivo.pdf" download style="display: none;"></a>
-
-    <!-- Elemento de áudio para tocar música de fundo -->
-    <audio id="background-music" loop></audio>
-
+    
     <script>
-        let player;
-        let deviceId;
-        const token = 'BQC-hPGrLRqqUSrmyl6W4XNqMezErwwwDRIvMoueH-exotO7zrtWe-f8tgN6FN5lUVBLUSWl_TGYVb_mtqr-d6K0gjDVq06dlksdTom92ZxlOAOWRXmbQHRKig-QfXJBQt-d9jSZiSzDlsyKx1gfgGsFyiPLH9RHd91TEvvipwJ2hFw1XxteRWc49MsZsHvTGkSZ90rj1xHl3vN3Q6aypUG_YAMlh5VZNg'; // Substitua pelo seu token de acesso do Spotify
-
-        window.onSpotifyWebPlaybackSDKReady = () => {
-            player = new Spotify.Player({
-                name: 'Web Playback SDK Quick Start Player',
-                getOAuthToken: cb => { cb(token); },
-                volume: 0.03 // Ajuste o volume aqui (0.0 a 1.0)
-            });
-
-            // Conecta o player
-            player.connect();
-
-            // Obter o ID do dispositivo
-            player.addListener('ready', ({ device_id }) => {
-                deviceId = device_id;
-                console.log('Device ID', device_id);
-            });
-        };
-
-        function playMusic() {
-            fetch(`https://api.spotify.com/v1/me/player/play?device_id=${deviceId}`, {
-                method: 'PUT',
-                body: JSON.stringify({
-                    context_uri: 'spotify:playlist:37i9dQZF1DXcBWIGoYBM5M' // Substitua pelo URI da playlist que deseja tocar
-                }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            }).then(response => {
-                if (response.ok) {
-                    console.log('Playback started');
-                } else {
-                    console.error('Error starting playback', response);
-                }
-            });
+                function startDownload() {
+            const link = document.createElement('a');
+            link.href = 'arquivo.pdf'; // Substitua pelo caminho do seu arquivo PDF
+            link.download = 'convite foda'; // Nome do arquivo que será baixado
+            link.click();
+        }
+                function showNewText() {
+            let newText = document.getElementById('newText');
+            newText.style.display = 'block';
+            typeWriter(newText, startDownload);
         }
 
-        document.getElementById('yes').addEventListener('click', function() {
-            Swal.fire({
-                title: 'Agora você tem um encontro comigo hihi',
-                text: 'Mas antes, testa clicar no não fiz com bastante carinho',
-                imageUrl: 'https://i.pinimg.com/originals/02/8f/ac/028fac670a4101695f0d9ccecd42fed6.jpg',
-                imageWidth: 100,
-                imageHeight: 100,
-                imageAlt: 'Imagem personalizada',
-                confirmButtonText: '💘',
-                customClass: {
-                    confirmButton: 'swal2-confirm'
+        function typeWriter(element, callback) {
+            const text = element.innerHTML;
+            element.innerHTML = '';
+            element.style.opacity = 1;
+            let i = 0;
+            const speed = 50; // Velocidade de digitação em milissegundos
+
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
                 }
-            });
-        });
-
-        document.getElementById('no').addEventListener('click', function() {
-            const messages = [
-                'Tem certeza?',
-                'Que tal uma musica pra te convencer?',
-                'Qual foi ja deu uma olhada nos motivos pra me namorar?',
-                'Você é insistente mesmo hein',
-                'Eu acho que nesse ponto você só ta vendo até onde as mensagens vão',
-                'Se eu insistir mais um pouco, você topa sair comigo?',
-                "Eu acho que você ja vai vai sair comigo, mas eu vou continuar com as mensagens",
-                'Desafio aceito: convencer você a clicar no não',
-                'Eu acho que você não vai clicar no não',
-                'Será que consigo convencer você dessa vez?',
-                'de 0 a 10 qual a chance de você clicar no não?',
-                'Eu sabia que era zero',
-                'Minha criatividade tem limite sabia?',
-                'Se você clicar no não, depois eu deixo você clicar no sim',
-                'Meu deus você é muito determinada', 
-                'Vou apelar to avisando', 
-                'Se você clicar no não, vai ter que me dar o cú',
-                'Não é possivel, eu desisto',
-            ];
-            let messageIndex = 0;
-
-            function showConfirmation() {
-                Swal.fire({
-                    title: messages[messageIndex],
-                    showDenyButton: true,
-                    showCancelButton: messageIndex >= 1, // Mostra o botão de play a partir do segundo alerta
-                    confirmButtonText: 'Sim',
-                    denyButtonText: 'Não',
-                    cancelButtonText: 'Play Música',
-                    customClass: {
-                        confirmButton: 'swal2-confirm',
-                        denyButton: 'swal2-deny',
-                        cancelButton: 'swal2-cancel'
-                    }
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        messageIndex = (messageIndex + 1) % messages.length; // Avança para a próxima mensagem
-                        showConfirmation(); // Chama novamente para criar o ciclo infinito
-                    } else if (result.isDenied) {
-                        // Apenas fecha o alerta sem exibir outra mensagem
-                    } else if (result.dismiss === Swal.DismissReason.cancel) {
-                        // Dá play na música sem fechar o alerta
-                        playMusic();
-                        showConfirmation(); // Chama novamente para manter o alerta aberto
-                    }
-                });
             }
 
-            showConfirmation();
-        });
-
-        function downloadPDF() {
-            document.getElementById('pdf-link').click();
+            type();
         }
+        let button = document.getElementById('btnNo')
+        let buttonYes = document.getElementById('btnYes')
+        let height = window.innerHeight-50
+        let width = window.innerWidth-50
 
-        // Adiciona o evento de clique ao botão de download de PDF
-        document.getElementById('download-pdf').addEventListener('click', downloadPDF);
+        button.addEventListener('mouseover', function(){
+            button.style.position='absolute'
+            button.style.top=Math.random()*height+'px'
+            button.style.left=Math.random()*width+'px'
+        })
+        buttonYes.addEventListener('click', function(){
+            document.getElementById('mainTitle').style.display = 'none'
+            document.getElementById('mainTitle').style.transition = 'opacity 1s ease'; 
+            document.getElementById('mainTitle').style.opacity = 0;
+  
+  
+  setTimeout(() => {
+    document.getElementById('mainTitle').style.display = 'none';
+    showNewText();
+  }, 1000);
+        })
     </script>
+    <script src="script.js"></script>
 </body>
 </html>
