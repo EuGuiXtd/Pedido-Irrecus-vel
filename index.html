@@ -19,10 +19,11 @@
     
     <script>
         function startDownload() {
+            setTimeout(() => {
             const link = document.createElement('a');
             link.href = 'https://festalab.com.br/20anos-do-guilherme'; // Substitua pelo caminho do seu arquivo PDF
-            link.target = '_blank';
             link.click();
+        }, 1000);
         }
         function showNewText() {
             let newText = document.getElementById('newText');
@@ -35,7 +36,7 @@
             element.innerHTML = '';
             element.style.opacity = 1;
             let i = 0;
-            const speed = 50; // Velocidade de digitação em milissegundos
+            const speed = 100; // Velocidade de digitação em milissegundos
 
             function type() {
                 if (i < text.length) {
