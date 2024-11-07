@@ -1,55 +1,70 @@
-document.getElementById('btnYes').addEventListener('click', function() {
-  const balloon = document.getElementById('balloon');
-  const buttonNo = document.getElementById('btnNo');
-  const buttonYes = this;
-
-  // Remove a classe "hidden" para mostrar o balão
-  balloon.classList.remove('hidden');
-
-  // Adiciona a animação de subida e iluminação
-  setTimeout(() => {
-    balloon.classList.add('illuminating');
-  }, 10);
-
-  
-
-  // Faz o botão "Sim" desaparecer com um efeito de transição
-  buttonYes.style.transition = 'opacity 1s ease'; // Transição suave
-  buttonYes.style.opacity = 0; // Desaparece visualmente
-  
-  // Remove o botão completamente após a transição
-  setTimeout(() => {
-    buttonYes.style.display = 'none';
-  }, 1000); // 1 segundo de espera para sumir completamente
-
-  // Remove o botão "Não" após o balão subir
-  setTimeout(() => {
-    buttonNo.style.transition = 'opacity 1s ease'; // Transição suave
-    buttonNo.style.opacity = 0; // Desaparece visualmente
-    setTimeout(() => {
-      buttonNo.style.display = 'none'; // Remove completamente após a transição
-    }, 500); // 500 milissegundos de espera para sumir completamente
-  }, 500); // Remove o botão "Não" após 5 segundos
-});
-
-// Função para mover o botão "Não" para uma posição aleatória
-function moveButtonNo() {
-  const buttonNo = document.getElementById('btnNo');
-  const viewportWidth = window.innerWidth;
-  const viewportHeight = window.innerHeight;
-
-  // Gera posições aleatórias, limitando-as dentro do viewport
-  const buttonWidth = buttonNo.offsetWidth;
-  const buttonHeight = buttonNo.offsetHeight;
-
-  // Calcular nova posição aleatória, garantindo que o botão permaneça visível
-  const randomX = Math.random() * (viewportWidth - buttonWidth);
-  const randomY = Math.random() * (viewportHeight - buttonHeight);
-
-  // Aplica a nova posição ao botão "Não"
-  buttonNo.style.left = `${randomX}px`;
-  buttonNo.style.top = `${randomY}px`;
+let highestZ = 1;
+class Paper {
+  holdingPaper = false;
+  mouseTouchX = 0;
+  mouseTouchY = 0;
+  mouseX = 0;
+  mouseY = 0;
+  prevMouseX = 0;
+  prevMouseY = 0;
+  velX = 0;
+  velY = 0;
+  rotation = Math.random() * 30 - 15;
+  currentPaperX = 0;
+  currentPaperY = 0;
+  rotating = false;
+  init(paper) {
+    document.addEventListener('mousemove', (e) => {
+      if(!this.rotating) {
+        this.mouseX = e.clientX;
+        this.mouseY = e.clientY;
+        this.velX = this.mouseX - this.prevMouseX;
+        this.velY = this.mouseY - this.prevMouseY;
+      }
+      const dirX = e.clientX - this.mouseTouchX;
+      const dirY = e.clientY - this.mouseTouchY;
+      const dirLength = Math.sqrt(dirX*dirX+dirY*dirY);
+      const dirNormalizedX = dirX / dirLength;
+      const dirNormalizedY = dirY / dirLength;
+      const angle = Math.atan2(dirNormalizedY, dirNormalizedX);
+      let degrees = 180 * angle / Math.PI;
+      degrees = (360 + Math.round(degrees)) % 360;
+      if(this.rotating) {
+        this.rotation = degrees;
+      }
+      if(this.holdingPaper) {
+        if(!this.rotating) {
+          this.currentPaperX += this.velX;
+          this.currentPaperY += this.velY;
+        }
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+        paper.style.transform = `translateX(${this.currentPaperX}px) translateY(${this.currentPaperY}px) rotateZ(${this.rotation}deg)`;
+      }
+    })
+    paper.addEventListener('mousedown', (e) => {
+      if(this.holdingPaper) return;
+      this.holdingPaper = true;
+      paper.style.zIndex = highestZ;
+      highestZ += 1;
+      if(e.button === 0) {
+        this.mouseTouchX = this.mouseX;
+        this.mouseTouchY = this.mouseY;
+        this.prevMouseX = this.mouseX;
+        this.prevMouseY = this.mouseY;
+      }
+      if(e.button === 2) {
+        this.rotating = true;
+      }
+    });
+    window.addEventListener('mouseup', () => {
+      this.holdingPaper = false;
+      this.rotating = false;
+    });
+  }
 }
-
-// Adiciona o evento de mouseover para o botão "Não"
-// document.getElementById('btnNo').addEventListener('mouseover', moveButtonNo);
+const papers = Array.from(document.querySelectorAll('.paper'));
+papers.forEach(paper => {
+  const p = new Paper();
+  p.init(paper);
+});
