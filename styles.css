@@ -1,0 +1,91 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* Posiciona o balão na parte inferior da tela */
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+  }
+  h1 {
+    margin: 0;
+    color: white;
+  }
+  .container {
+    position: relative;
+    display: flex; /* Usado para alinhar os botões lado a lado */
+  }
+  
+  #newText {
+    display: none;
+    opacity: 0;
+    transition: opacity 1s ease;
+    color: white;
+  }
+  
+  button {
+    padding: 15px 30px;
+    font-size: 18px;
+    border: none;
+    background-color: #ff007f;
+    color: white;
+    cursor: pointer;
+    z-index: 2;
+    margin: 0 10px; /* Margem entre os botões */
+  }
+  
+  #balloon {
+    position: absolute;
+    bottom: 0;
+    width: 100px;
+    height: 150px;
+    background: radial-gradient(circle at 50% 20%, rgba(255, 205, 50, 0.9), rgba(255, 150, 50, 0.7), rgba(0, 0, 0, 0));
+    border-radius: 15% 15% 40% 40%; /* Formato de lanterna */
+    border: 2px solid rgba(255, 215, 0, 0.8); /* Contorno brilhante */
+    box-shadow: 0 0 50px 30px rgba(255, 205, 50, 0.5); /* Efeito de iluminação suave ao redor */
+    transition: all 2s ease;
+    z-index: 1;
+  }
+  
+  #balloon.illuminating {
+    animation: riseUp 5s forwards; /* Animação de subida */
+  }
+  
+  .no-button-container {
+    position: relative; /* Para que o botão "Não" possa ser posicionado relativo a esse container */
+  }
+  
+  .no-button {
+    position: absolute; /* Solta o botão da div container */
+    transition: transform 0.2s; /* Transição suave para o movimento */
+    left: calc(50% + 40px); /* Posição inicial ao lado do botão "Sim" */
+    top: 0; /* Alinha ao topo do botão "Sim" */
+  }
+  
+  @keyframes riseUp {
+    0% {
+      bottom: 0;
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    100% {
+      bottom: 100vh;
+      opacity: 0;
+    }
+  }
+  
+  .hidden {
+    display: none;
+  }
