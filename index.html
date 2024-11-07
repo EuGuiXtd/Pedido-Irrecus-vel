@@ -1,49 +1,77 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>mylena ❤️</title>
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Short+Stack&amp;family=Homemade+Apple&amp;display=swap'>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Pedido Irrecusavel</title>
 </head>
 <body>
+    <div class="box">
+        <h1 id="mainTitle">Aceita sair comigo?</h1>
+        <div class="button-container">
+            <button id="btnYes">Sim</button>
+            <button id="btnNo">Não</button>
+        </div>
+        <h2 id="newText">Tá vendo esse balão subindo, é o meu pedido se realizando de conseguir sair com a garota dos meus sonhos ❤</h2>
+        <div id="balloon" class="hidden"></div>
+    </div>
+    
+    <script>
+        function startDownload() {
+            setTimeout(() => {
+            const link = document.createElement('a');
+            link.href = 'https://festalab.com.br/guilherme-e-mylena'; // Substitua pelo caminho do seu arquivo PDF
+            link.click();
+        }, 1000);
+        }
+        function showNewText() {
+            let newText = document.getElementById('newText');
+            newText.style.display = 'block';
+            typeWriter(newText, startDownload);
+        }
 
-<!-- Developed by Saravanan  -->
-<div class="paper heart">
-</div>
-<div class="paper image">
-  <p> "Eu soube que me apaixonei por um sonho"</p>
-    <p>Essa frase representa muito oque eu sinto por você</p>
-    <p>A cada poucos dias que passa, parece que você é um sonho</p>
-    <p>Se tornando realidade e me fazendo querer sonhar cada vez mais</p>
-    <p>E eu achei ela na musica "everything i wanted"</p>
-</div>
-<div class="paper image">
-  <p</p>
-  <p>"Eu aprendi a ser feliz com as coisas simples." </p>
-   <p>Eu não sei porque, mas você me passa muito essa vibe</p> 
-   <p>Até porque você é tão perfeita que não precisa de mais nada pra ser feliz</p> 
-   <p>Referencia: entrevista com Billie Eilish para a ELLE (2020)</p>
-</div>
-<div class="paper image">
-  <p>"Nunca deixe alguém te fazer sentir como se você não fosse bom o suficiente." </p>
-  <p>De verdade por mais que eu te conheça a tão pouco tempo</p>
-  <p>Já consigo enxergar a garota incrivel que você é</p>
-  <p>E o brilho que erradia de você, então nunca mesmo deixe alguem falar mal de você</p>
-   <p>Se quiser saber da onde é a frase é da musica "My Future"</p>
-</div>
-<div class="paper red">
-<p class="p1">Como eu não te conheço a muito tempo</p>
-<p class="p2">Vou deixar a Billie Eilish falar por mim</p>
-</div>
-<div class="paper">
-<p class="p1">Parabéns </p>
-  <p class="p1">Maravilhosa <span style="color: red !important;">❤️</span></p>
-</div>
-<div class="paper">
-<p class="p1">Arreste os papéis pra mexer!</p>
-</div>
-<!-- javascript file -->
-  <script  src="script.js"></script>
+        function typeWriter(element, callback) {
+            const text = element.innerHTML;
+            element.innerHTML = '';
+            element.style.opacity = 1;
+            let i = 0;
+            const speed = 100; // Velocidade de digitação em milissegundos
+
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+
+            type();
+        }
+        let button = document.getElementById('btnNo')
+        let buttonYes = document.getElementById('btnYes')
+        let height = window.innerHeight-50
+        let width = window.innerWidth-50
+
+        button.addEventListener('mouseover', function(){
+            button.style.position='absolute'
+            button.style.top=Math.random()*height+'px'
+            button.style.left=Math.random()*width+'px'
+        })
+        buttonYes.addEventListener('click', function(){
+            document.getElementById('mainTitle').style.display = 'none'
+            document.getElementById('mainTitle').style.transition = 'opacity 1s ease'; 
+            document.getElementById('mainTitle').style.opacity = 0;
+  
+
+            setTimeout(() => {
+    document.getElementById('mainTitle').style.display = 'none';
+                showNewText();
+            }, 1000);
+        })
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>
