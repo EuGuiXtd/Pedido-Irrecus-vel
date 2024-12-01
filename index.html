@@ -13,43 +13,9 @@
             <button id="btnYes">Sim</button>
             <button id="btnNo">Não</button>
         </div>
-        <h2 id="newText">Tá vendo esse balão subindo, é o meu pedido se realizando de conseguir sair com a garota dos meus sonhos ❤</h2>
-        <div id="balloon" class="hidden"></div>
     </div>
     
     <script>
-        function startDownload() {
-            setTimeout(() => {
-            const link = document.createElement('a');
-            link.href = 'https://festalab.com.br/guilherme-e-mylena'; // Substitua pelo caminho do seu arquivo PDF
-            link.click();
-        }, 1000);
-        }
-        function showNewText() {
-            let newText = document.getElementById('newText');
-            newText.style.display = 'block';
-            typeWriter(newText, startDownload);
-        }
-
-        function typeWriter(element, callback) {
-            const text = element.innerHTML;
-            element.innerHTML = '';
-            element.style.opacity = 1;
-            let i = 0;
-            const speed = 100; // Velocidade de digitação em milissegundos
-
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else if (callback) {
-                    callback();
-                }
-            }
-
-            type();
-        }
         let button = document.getElementById('btnNo')
         let buttonYes = document.getElementById('btnYes')
         let height = window.innerHeight-50
@@ -61,17 +27,22 @@
             button.style.left=Math.random()*width+'px'
         })
         buttonYes.addEventListener('click', function(){
-            document.getElementById('mainTitle').style.display = 'none'
             document.getElementById('mainTitle').style.transition = 'opacity 1s ease'; 
             document.getElementById('mainTitle').style.opacity = 0;
-  
 
             setTimeout(() => {
-    document.getElementById('mainTitle').style.display = 'none';
+                document.getElementById('mainTitle').style.display = 'none';
                 showNewText();
             }, 1000);
         })
+
+        function showNewText() {
+            let newText = document.createElement('p');
+            newText.textContent = 'Lembra de levar sua fita metrica kkkkkkk';
+            newText.style.color = 'white';
+            newText.style.textAlign = 'center';
+            document.querySelector('.box').insertBefore(newText, document.querySelector('.button-container'));
+        }
     </script>
-    <script src="script.js"></script>
 </body>
 </html>
