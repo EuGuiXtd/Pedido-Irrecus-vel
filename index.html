@@ -8,27 +8,36 @@
 </head>
 <body>
     <div class="box">
-        <h1 id="mainTitle">Aceita sair comigo?</h1>
+        <h1 id="mainTitle">Aceita namorar comigo comigo?</h1>
         <div class="button-container">
             <button id="btnYes">Sim</button>
             <button id="btnNo">Não</button>
         </div>
-        <h2 id="newText">Tá vendo esse balão subindo? É o meu desejo de conseguir sair com uma princesa se realizando</h2>
+        <h2 id="newText">Tá vendo esse balão subindo? É o meu desejo de ter a melhor namorada do mundo se realizando 😘</h2>
         <div id="balloon" class="hidden"></div>
     </div>
     
     <script>
-        function startDownload() {
-            setTimeout(() => {
-            const link = document.createElement('a');
-            link.href = 'https://festalab.com.br/guilherme-e-sara'; // Substitua pelo caminho do seu arquivo PDF
-            link.click();
-        }, 1000);
+        // function startDownload() {
+        //     setTimeout(() => {
+        //     const link = document.createElement('a');
+        //     link.href = ''; // Substitua pelo caminho do seu arquivo PDF
+        //     link.click();
+        // }, 1000);
+        // }
+        function showImage() {
+            let newText = document.getElementById('newText');
+            newText.style.display = 'none'; // Oculta o texto
+
+            let img = document.createElement('img');
+            img.src = 'img.png';
+            img.className = 'centered-img'; // Aplica a classe CSS para centralizar e redimensionar a imagem
+            document.body.appendChild(img);
         }
         function showNewText() {
             let newText = document.getElementById('newText');
             newText.style.display = 'block';
-            typeWriter(newText, startDownload);
+            typeWriter(newText, showImage);
         }
 
         function typeWriter(element, callback) {
@@ -71,6 +80,7 @@
                 showNewText();
             }, 1000);
         })
+
     </script>
     <script src="script.js"></script>
 </body>
